@@ -1,4 +1,4 @@
-import { useId, useMemo, useRef, type ReactNode } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { SwiperProps } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
@@ -47,6 +47,12 @@ interface BaseSliderProps<T> {
     emptyActionLabel?: string;
     emptyActionTo?: string;
     onEmptyActionClick?: () => void;
+
+    // пагинация
+    hasMore?: boolean;
+    onLoadMore?: () => void;
+    loadMoreLoading?: boolean;
+    loadMoreButtonText?: string;
 }
 
 export default function BaseSlider<T>({
@@ -74,15 +80,58 @@ export default function BaseSlider<T>({
     emptyActionLabel,
     emptyActionTo,
     onEmptyActionClick,
+
+    hasMore = false,
+    onLoadMore,
+    loadMoreLoading = false,
+    loadMoreButtonText = 'Загрузить ещё'
 }: BaseSliderProps<T>) {
     const swiperRef = useRef<SwiperType | null>(null);
     const uniqueId = useId().replace(/:/g, '');
     const paginationClass = `js-pagination-${uniqueId}`;
 
-    const itemsKey = useMemo(() =>
-        JSON.stringify(items.map((_, i) => i)),
-        [items]
-    );
+    const allItems = useMemo(() => {
+        if (!hasMore) return items;
+        return [...items, null];
+    }, [items, hasMore]);
+
+    const [shouldMaintainPosition, setShouldMaintainPosition] = useState(false);
+    const lastActiveIndexRef = useRef(0);
+
+    useEffect(() => {
+        if (loadMoreLoading) {
+            lastActiveIndexRef.current = swiperRef.current?.activeIndex || 0;
+            setShouldMaintainPosition(true);
+        }
+    }, [loadMoreLoading]);
+
+    useEffect(() => {
+        if (!loadMoreLoading && shouldMaintainPosition && swiperRef.current) {
+            setTimeout(() => {
+                swiperRef.current?.slideTo(lastActiveIndexRef.current);
+                setShouldMaintainPosition(false);
+            }, 50);
+        }
+    }, [loadMoreLoading, shouldMaintainPosition]);
+
+    const renderWithLoadMore = (item: T | null, index: number) => {
+        if (item === null && hasMore) {
+            return (
+                <div className="flex items-center justify-center h-full min-h-[300px]">
+                    <BaseButton
+                        onClick={onLoadMore}
+                        loading={loadMoreLoading}
+                        title={loadMoreButtonText}
+                        variant="primary"
+                        size="lg"
+                        className="min-w-40 w-full max-w-none!"
+                    />
+                </div>
+            );
+        }
+        return renderItem(item as T, index);
+    };
+
 
     return (
         <div className={clsx('w-full flex flex-col gap-6', className)}>
@@ -144,7 +193,6 @@ export default function BaseSlider<T>({
                 />
             ) : (
                 <Swiper
-                    key={itemsKey}
                     modules={[Pagination, Navigation]}
                     onBeforeInit={(swiper) => {
                         swiperRef.current = swiper;
@@ -165,9 +213,9 @@ export default function BaseSlider<T>({
                     {...swiperProps}
                     className={clsx('w-full !overflow-visible', swiperProps?.className)}
                 >
-                    {items.map((item, index) => (
+                    {allItems.map((item, index) => (
                         <SwiperSlide key={index} className={clsx(slideClassName, 'backface-hidden! transform-gpu! transform-3d!')}>
-                            {renderItem(item, index)}
+                            {renderWithLoadMore(item, index)}
                         </SwiperSlide>
                     ))}
                 </Swiper>

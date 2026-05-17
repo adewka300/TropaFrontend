@@ -29,7 +29,7 @@ const Accordion = ({ number, title, children, className, defaultOpen = false, co
                     <div className="relative group pb-1">
                         <DisclosureButton className="flex flex-row items-center justify-between relative z-20 w-full h-20 pl-5 text-left bg-transparent cursor-pointer focus:outline-none overflow-hidden">
                             <div className="flex items-center gap-2 max-w-[85%] h-full py-2">
-                                {number !== null && (
+                                {!!number && (
                                     <span className="text-primary text-heading-sm shrink-0 leading-none">{number}.</span>
                                 )}
                                 <span className={clsx(titleColor, "text-body-lg line-clamp-2")}>

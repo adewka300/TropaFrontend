@@ -1,15 +1,16 @@
 import LogoFull from '@/shared/assets/logos/LogoFull'
+import { NavLink } from '@/shared/components/ui/buttons/NavLink'
 import SocialLink from '@/shared/components/ui/buttons/SocialLink'
 import FooterBg from '@/widgets/footer/assets/FooterBg'
 import { motion } from 'framer-motion'
 
 export function Footer({ className }: { className?: string }) {
     const navLinks = [
-        { label: 'Преимущества', href: '#advantages' },
-        { label: 'Как это работает', href: '#how-it-works', className: 'order-3 desktop:order-2' },
-        { label: 'Отзывы', href: '#reviews', className: 'order-5 desktop:order-3' },
-        { label: 'FAQ', href: '#faq', className: 'order-2 desktop:order-4' },
-        { label: 'Блог', href: '#blog', className: 'order-4 desktop:order-5' },
+        { label: 'Преимущества', href: '/#advantages' },
+        { label: 'Как это работает', href: '/#guide', className: 'order-3 desktop:order-2' },
+        { label: 'Отзывы', href: '/#reviews', className: 'order-5 desktop:order-3' },
+        { label: 'FAQ', href: '/faq', className: 'order-2 desktop:order-4' },
+        { label: 'Блог', href: '/#blog', className: 'order-4 desktop:order-5' },
     ]
 
     const legalLinks = [
@@ -31,12 +32,12 @@ export function Footer({ className }: { className?: string }) {
                                     key={link.label}
                                     className={`${link.className} w-max justify-self-start`}
                                 >
-                                    <a
+                                    <NavLink
                                         href={link.href}
                                         className="text-body-sm-medium hover:text-primary transition-colors whitespace-nowrap block text-left"
                                     >
                                         {link.label}
-                                    </a>
+                                    </NavLink>
                                 </li>
                             ))}
                         </ul>
@@ -70,9 +71,12 @@ export function Footer({ className }: { className?: string }) {
                         <ul className="flex flex-col gap-3 leading-none">
                             {legalLinks.map((link) => (
                                 <li key={link.label}>
-                                    <a href={link.href} className="text-body-sm-medium hover:text-primary transition-colors">
+                                    <NavLink
+                                        href={link.href}
+                                        className="text-body-sm-medium hover:text-primary transition-colors"
+                                    >
                                         {link.label}
-                                    </a>
+                                    </NavLink>
                                 </li>
                             ))}
                         </ul>

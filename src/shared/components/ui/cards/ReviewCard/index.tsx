@@ -4,6 +4,8 @@ import ReviewBorder from '@/pages/home/sections/reviews/assets/borders/ReviewBor
 import { RatingStars } from '@/shared/components/ui/RatingStars'
 import type { Review } from '@/entities/review/model/types'
 import { BorderWrapper } from '@/shared/components/wrappers/BorderWrapper'
+import UserIcon from '@/widgets/header/assets/icons/UserIcon'
+import { Link } from 'react-router-dom'
 
 interface ReviewCardProps extends Review {
     variant?: 'default' | 'notepad' | 'story'
@@ -12,6 +14,7 @@ interface ReviewCardProps extends Review {
 }
 
 export const ReviewCard = ({
+    userId,
     bgImage,
     nickName,
     description,
@@ -27,29 +30,37 @@ export const ReviewCard = ({
     const cardSizes = variant === 'notepad' ? 'desktop:px-8 desktop:pb-8 desktop:pt-12 px-4 pb-4 pt-8 max-w-min' : 'pl-6 pr-5 pt-6 pb-4 max-w-85'
 
     return (
-        <li className={clsx("relative text-text flex flex-col w-full min-h-40",
+        <li className={clsx("relative text-text flex flex-col w-full mt-1",
+            description ? 'min-h-40' : 'min-h-24',
             variant === 'notepad' && "rotate-[0.5deg] mb-1",
             cardSizes,
             className
         )}>
             <div className="z-10 flex flex-col gap-4">
-                <div className="flex flex-row gap-2 z-20">
+                <Link to={`/user/${userId}`} className="flex flex-row gap-2 z-20">
                     <div
-                        className={clsx("-rotate-3 aspect-square object-cover rounded-[0.25rem]", variant === 'notepad' ? 'max-w-12' : variant === 'story' ? "max-w-11.5" : "max-w-18")}
+                        className={clsx("-rotate-3 shrink-0 w-full h-full aspect-square object-cover rounded-[0.25rem]", !userImage && 'border border-text/90 rounded-xs', variant === 'notepad' ? 'max-w-12' : variant === 'story' ? "max-w-11.5" : "max-w-18")}
                     >
-                        <img
-                            src={userImage}
-                            alt={nickName}
-                            className='w-full h-full'
-                        />
+                        {userImage ? (
+                            <img
+                                src={userImage}
+                                alt={nickName || 'User avatar'}
+                                className='w-full h-full'
+                            />
+                        ) : (
+                            <UserIcon className={clsx('w-full h-full absolute inset-0 scale-60 stroke-primary')} />
+                        )}
                     </div>
 
                     <div className={clsx(variant === 'story' ? 'justify-center' : 'justify-start', "flex flex-col gap-0.5")}>
                         {rating !== undefined && <RatingStars rating={rating} starClassName="w-3 h-3" />}
-                        <h4 className={clsx(variant === 'story' ? 'text-background' : 'mt-auto text-primary ', "text-body-lg! leading-[0.98]! mt-")}>{nickName}</h4>
+                        <h4
+                            className={clsx(variant === 'story' ? 'text-background' : 'mt-auto text-primary ', "text-body-sm! tablet:text-body-lg! leading-[0.98]!")}>
+                            {nickName}
+                        </h4>
                         {date && <span className="text-body-xs text-secondary/60 leading-none">{date}</span>}
                     </div>
-                </div>
+                </Link>
 
                 <p className="text-body-xs desktop:text-body-sm min-w-44 whitespace-pre-wrap">
                     {description}

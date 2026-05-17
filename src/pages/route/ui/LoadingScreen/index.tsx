@@ -20,7 +20,6 @@ interface LoadingScreenProps {
     onFinished?: () => void;
     isLoading: boolean;
 }
-
 const LoadingScreen = ({ onFinished, isLoading }: LoadingScreenProps) => {
     const { isAboveTablet } = useScreenSize();
     const [step, setStep] = useState(1);
@@ -28,34 +27,49 @@ const LoadingScreen = ({ onFinished, isLoading }: LoadingScreenProps) => {
     const [thoughtsFinished, setThoughtsFinished] = useState(false);
 
     const pawsCount = isAboveTablet ? 22 : 6;
-
     const totalPawsDuration = useMemo(() => (pawsCount * 150) + 800, [pawsCount]);
 
     useEffect(() => {
+        if (isLoading) {
+            setStep(1);
+            setPawsFinished(false);
+            setThoughtsFinished(false);
+        }
+    }, [isLoading]);
+
+    // анимация мыслей
+    useEffect(() => {
+        if (!isLoading) return;
+
         if (step < 4) {
             const timer = setTimeout(() => setStep(prev => prev + 1), 2000);
             return () => clearTimeout(timer);
-        } else {
+        } else if (step === 4 && !thoughtsFinished) {
             const finalTimer = setTimeout(() => setThoughtsFinished(true), 1500);
             return () => clearTimeout(finalTimer);
         }
-    }, [step]);
+    }, [step, isLoading, thoughtsFinished]);
 
+    // анимация лапок
     useEffect(() => {
+        if (!isLoading) return;
+
         const timer = setTimeout(() => setPawsFinished(true), totalPawsDuration);
         return () => clearTimeout(timer);
-    }, [totalPawsDuration]);
+    }, [totalPawsDuration, isLoading]);
 
+    // завершение загрузки
     useEffect(() => {
-        if (pawsFinished && thoughtsFinished) {
+        if (isLoading && pawsFinished && thoughtsFinished) {
             onFinished?.();
         }
-    }, [pawsFinished, thoughtsFinished, onFinished]);
+    }, [pawsFinished, thoughtsFinished, isLoading, onFinished]);
 
     return (
         <AnimatePresence>
             {isLoading && (
                 <motion.div
+                    key="loading-screen"
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.8, ease: "easeInOut" }}
                     className="fixed inset-0 flex items-center justify-center flex-col w-full h-full bg-background z-100"

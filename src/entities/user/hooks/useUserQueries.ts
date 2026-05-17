@@ -12,6 +12,15 @@ export const useUserProfile = () => {
     });
 };
 
+export const useUserById = (userId: number) => {
+    return useQuery({
+        queryKey: ["user", userId],
+        queryFn: () => userApi.getUserById(userId),
+        enabled: !!userId,
+        select: (data) => data.data,
+    });
+};
+
 export const useUserStatistics = () => {
     return useQuery({
         queryKey: ["user", "statistics"],
@@ -42,7 +51,24 @@ export const useUserAllRoutes = (limit = 6) => {
     return useInfiniteQuery({
         queryKey: ["user", "routes", "all", { limit }],
         queryFn: ({ pageParam = 0 }) =>
-            userApi.getRoutes({ limit, offset: pageParam }),
+            userApi.getRoutes({ limit, offset: pageParam, }),
+        getNextPageParam: (lastPage, allPages) => {
+            const loaded = allPages.reduce((sum, page) => sum + page.data.length, 0);
+            return loaded < lastPage.total_count ? loaded : undefined;
+        },
+        initialPageParam: 0,
+        select: (data) => ({
+            routes: data.pages.flatMap((page) => page.data),
+            totalCount: data.pages[0]?.total_count ?? 0,
+        }),
+    });
+};
+
+export const useUserPublicRoutes = (limit = 6) => {
+    return useInfiniteQuery({
+        queryKey: ["user", "routes", "public", { limit }],
+        queryFn: ({ pageParam = 0 }) =>
+            userApi.getRoutes({ public_only: true, limit, offset: pageParam }),
         getNextPageParam: (lastPage, allPages) => {
             const loaded = allPages.reduce((sum, page) => sum + page.data.length, 0);
             return loaded < lastPage.total_count ? loaded : undefined;
@@ -88,3 +114,4 @@ export const useRecommendedRoutes = (limit = 6, cityId?: string) => {
         staleTime: 5 * 60 * 1000,
     });
 };
+

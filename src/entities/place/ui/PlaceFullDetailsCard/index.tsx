@@ -115,9 +115,9 @@ export default function PlaceFullDetailsCard({
                         </>
                     )}
 
-                    {(address || metro || budgetText) && (
+                    {(address || metro || budgetText || coordinates) && (
                         <div className="desktop:order-none desktop:col-span-5 flex flex-row gap-4 desktop:gap-8">
-                            {address && yandexMapsUrl ? (
+                            {(address || coordinates) && yandexMapsUrl ? (
                                 <a
                                     href={yandexMapsUrl}
                                     target="_blank"
@@ -125,7 +125,7 @@ export default function PlaceFullDetailsCard({
                                     className="flex flex-col desktop:flex-row group items-center gap-1 text-primary"
                                 >
                                     <GeoIconSimple className="size-5 desktop:size-6" />
-                                    <span className="text-body-xs group-hover:underline decoration-1 underline-offset-2">{address}</span>
+                                    <span className="text-body-xs group-hover:underline decoration-1 underline-offset-2">{address || 'Открыть в Яндекс.Картах'}</span>
                                 </a>
                             ) : (
                                 address && (

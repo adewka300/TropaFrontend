@@ -15,6 +15,8 @@ import type {
     VisibilityRequest,
     PublicRoutesResponse,
     RecommendedRoutesResponse,
+    CopyPublicRouteRequest,
+    CopyPublicRouteResponse,
 } from "@/shared/api/route/types";
 
 export const routeApi = {
@@ -28,8 +30,8 @@ export const routeApi = {
         return response.data;
     },
 
-    cancel: async (data: CancelRouteRequest): Promise<CancelRouteResponse> => {
-        const response = await api.post<CancelRouteResponse>("/route/cancel", data);
+    copyPublic: async (data: CopyPublicRouteRequest): Promise<CopyPublicRouteResponse> => {
+        const response = await api.post<CopyPublicRouteResponse>("/route/copy-public/", data);
         return response.data;
     },
 

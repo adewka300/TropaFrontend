@@ -14,6 +14,7 @@ import HomeAboutFeatherDesktop2 from "@/pages/home/sections/about/assets/visual/
 import { useRef } from "react"
 import { RouteEntitySlider } from "@/entities/route/ui/RouteEntitySlider"
 import type { EntitySliderRef } from "@/shared/components/ui/sliders/EntitySlider/ui/EntitySlider"
+import { useRecommendedRoutes } from "@/entities/user/hooks/useUserQueries"
 
 
 const HomePopularRoutes = (props: React.HTMLAttributes<HTMLElement>) => {
@@ -36,6 +37,8 @@ const HomePopularRoutes = (props: React.HTMLAttributes<HTMLElement>) => {
     const featherX = useTransform(smoothProgress, [0, 1], [-30, 60]);
     const featherY = useTransform(smoothProgress, [0, 1], [0, 70]);
     const featherRotate = useTransform(smoothProgress, [0, 1], [10, -10]);
+
+    const { data: recommendedRoutes, isLoading: recommendedLoading } = useRecommendedRoutes(6);
 
     return (
         <section ref={sectionRef} className={`${props.className} overflow-hidden flex flex-col w-full max-w-mobile pt-4 lg:pt-12 lg:-mt-12 desktop:px-10 items-start pb-26 relative`}>
@@ -111,7 +114,8 @@ const HomePopularRoutes = (props: React.HTMLAttributes<HTMLElement>) => {
             <div className="w-full">
                 <RouteEntitySlider
                     ref={sliderRef}
-                    routes={mockRoutesData}
+                    routes={recommendedRoutes ?? []}
+                    loading={recommendedLoading}
                     className="z-10"
                     withClothespins
                 />

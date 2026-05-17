@@ -28,7 +28,7 @@ export const LoginForm = () => {
 
             <FormError message={errorMessage} />
 
-            <div className="flex flex-col w-full desktop:flex-row items-center gap-1 sm:max-w-1/2">
+            <div className="flex flex-col w-full desktop:flex-row items-start gap-1 sm:max-w-1/2">
                 <BaseInput
                     {...register("email")}
                     placeholder="E-mail"

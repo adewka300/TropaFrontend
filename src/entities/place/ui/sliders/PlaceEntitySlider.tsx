@@ -24,5 +24,5 @@ export const PlaceEntitySlider = ({ places, ref, ...props }: PlaceEntitySliderPr
             to: `/place/${place.id}`,
         },
     }));
-    return <EntitySlider ref={ref} items={items} {...props} />;
+    return <EntitySlider ref={ref} maxItems={12} items={items} {...props} />;
 };

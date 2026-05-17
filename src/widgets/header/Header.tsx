@@ -19,6 +19,7 @@ import { useHeader } from '@/widgets/header/hooks/useHeader';
 import { useHeaderLinks } from '@/widgets/header/hooks/useHeaderLinks';
 import { DEFAULT_LINKS } from '@/widgets/header/model/navigation';
 import { NavListItem } from '@/widgets/header/ui/NavListItem';
+import { NavLink } from '@/shared/components/ui/buttons/NavLink';
 
 interface HeaderProps {
     user?: User | null;
@@ -36,6 +37,7 @@ export function Header({ user, onLogin, onRegister, onLogout, onMenuClick, class
     const { isMenuOpen, handleMenuToggle, closeMenu } = useHeader({ onMenuClick });
 
     const menuTransition = { duration: 0.4, ease: [0.4, 0, 0.2, 1] as const };
+
     return (
         <header className={`${className} relative bg-transparent px-0.5 pb-[0.2rem] xs:pb-1.5 tablet:pb-[0.2rem] w-full transition-all duration-300`}>
             <div className={clsx(
@@ -48,18 +50,31 @@ export function Header({ user, onLogin, onRegister, onLogout, onMenuClick, class
 
                     {isAboveTablet && (
                         <nav className="flex items-center gap-5 py-2 order-1">
-                            {DEFAULT_LINKS.map((route) => (
-                                <Link
-                                    key={route.path}
-                                    to={route.path.startsWith('/#') ? '/' : route.path}
-                                    className={clsx(
-                                        "text-body-sm-medium transition-colors",
-                                        pathname === route.path ? "text-background/70" : "text-background"
-                                    )}
-                                >
-                                    {route.label}
-                                </Link>
-                            ))}
+                            {DEFAULT_LINKS.map((route) => {
+                                if (route.path.startsWith('/#')) {
+                                    return (
+                                        <NavLink
+                                            key={route.path}
+                                            href={route.path}
+                                            className="text-body-sm-medium transition-colors text-background"
+                                        >
+                                            {route.label}
+                                        </NavLink>
+                                    );
+                                }
+                                return (
+                                    <Link
+                                        key={route.path}
+                                        to={route.path}
+                                        className={clsx(
+                                            "text-body-sm-medium transition-colors",
+                                            pathname === route.path ? "text-background/70" : "text-background"
+                                        )}
+                                    >
+                                        {route.label}
+                                    </Link>
+                                );
+                            })}
                         </nav>
                     )}
                 </div>

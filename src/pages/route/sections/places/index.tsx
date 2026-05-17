@@ -14,10 +14,11 @@ interface RoutePlacesSectionProps extends HTMLAttributes<HTMLElement> {
     points: RoutePointDTO[];
     routeId: string;
     createdAt: string
+    isOwner: boolean;
     onPointClick?: (pointId: string) => void;
 }
 
-export const RoutePlacesSection = ({ points, onPointClick, className, routeId, createdAt, ...props }: RoutePlacesSectionProps) => {
+export const RoutePlacesSection = ({ points, onPointClick, className, routeId, createdAt, isOwner, ...props }: RoutePlacesSectionProps) => {
     const [openFoodIndex, setOpenFoodIndex] = useState<number | null>(null);
     const [foodErrorIndex, setFoodErrorIndex] = useState<number | null>(null);
     const { data: foodInterests, isError: foodError } = useFoodForm();
@@ -45,13 +46,13 @@ export const RoutePlacesSection = ({ points, onPointClick, className, routeId, c
                                 reviewsCount: point.reviews_count,
                                 image: point.image_url ?? undefined,
                                 city: point.city ?? undefined,
-                                badgeTypes: ['developers_choice', 'local_gem', 'popular_today'],
+                                badgeTypes: point.is_partner ? ['developers_choice'] : undefined,
                                 verifiedDate: `Гоша проверил ${createdAt}`,
                             }}
                             onCardClick={onPointClick}
                         />
 
-                        {index < points.length && (
+                        {isOwner && index < points.length && (
                             foodErrorIndex === index ? (
                                 <EmptyState
                                     message="Не удалось добавить точку питания"

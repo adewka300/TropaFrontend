@@ -17,6 +17,12 @@ interface EntitySliderProps {
     slideClassName?: string;
     ref?: React.Ref<EntitySliderRef>;
     maxItems?: number;
+    loading?: boolean
+
+    hasMore?: boolean;
+    onLoadMore?: () => void;
+    loadMoreLoading?: boolean;
+    loadMoreButtonText?: string
 }
 
 export interface EntitySliderRef {
@@ -32,7 +38,13 @@ export const EntitySlider = ({
     customBreakpoints,
     slideClassName,
     ref,
-    maxItems = 8,
+    maxItems,
+    loading,
+
+    hasMore = false,
+    onLoadMore,
+    loadMoreLoading = false,
+    loadMoreButtonText
 }: EntitySliderProps) => {
     const { isDesktop } = useScreenSize();
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -62,12 +74,17 @@ export const EntitySlider = ({
     return (
         <div ref={containerRef} className="w-full">
             <BaseSlider
-                items={items.slice(0, maxItems)}
+                items={maxItems ? items.slice(0, maxItems) : items}
                 className={clsx(className, 'w-full max-w-mobile pl-2.5 desktop:pl-0')}
                 slideClassName="!overflow-visible"
                 onBeforeInit={(swiper) => {
                     swiperRef.current = swiper;
                 }}
+                loading={loading}
+                hasMore={hasMore}
+                onLoadMore={onLoadMore}
+                loadMoreLoading={loadMoreLoading}
+                loadMoreButtonText={loadMoreButtonText}
                 swiperProps={{
                     spaceBetween: 10,
                     slidesPerView: 2,
@@ -80,21 +97,23 @@ export const EntitySlider = ({
                     },
                 }}
                 renderItem={(entity, index) => (
-                    <EntitySliderItem
-                        key={entity.id || index}
-                        entity={{
-                            border: { variant: 'mobileSmall' },
-                            ...entity
-                        }}
-                        index={index}
-                        scrollProgress={smoothScroll}
-                        withClothespins={withClothespins}
-                        rotateSlides={rotateSlides}
-                        canAnimateRepulsion={canAnimateRepulsion}
-                        hoveredIndex={hoveredIndex}
-                        setHoveredIndex={setHoveredIndex}
-                        slideClassName={slideClassName}
-                    />
+                    <div className='flex w-full h-full'>
+                        <EntitySliderItem
+                            key={entity.id || index}
+                            entity={{
+                                border: { variant: 'mobileSmall' },
+                                ...entity
+                            }}
+                            index={index}
+                            scrollProgress={smoothScroll}
+                            withClothespins={withClothespins}
+                            rotateSlides={rotateSlides}
+                            canAnimateRepulsion={canAnimateRepulsion}
+                            hoveredIndex={hoveredIndex}
+                            setHoveredIndex={setHoveredIndex}
+                            slideClassName={slideClassName}
+                        />
+                    </div>
                 )}
             />
         </div>

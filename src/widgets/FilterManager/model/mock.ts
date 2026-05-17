@@ -51,11 +51,11 @@ const MOODS: FilterOption[] = [
 
 // --- ФИЛЬТРЫ МАРШРУТОВ ---
 export const ROUTE_FILTERS: FilterSection[] = [
-    {
-        id: 'favorites',
-        title: 'Избранные маршруты',
-        options: [{ id: 'is_favorite', label: 'Показать избранное' }]
-    },
+    // {
+    //     id: 'favorites',
+    //     title: 'Избранные маршруты',
+    //     options: [{ id: 'is_favorite', label: 'Показать избранное' }]
+    // },
     {
         id: 'city',
         title: 'Город',

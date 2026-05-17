@@ -1,6 +1,5 @@
 import HomeH2 from "@/pages/home/components/HomeH2"
 import HomeReviewsDove from "@/pages/home/sections/reviews/assets/images/home-reviews-dove.png"
-import HomeReviewsSinglePhoto from "@/pages/home/sections/reviews/assets/images/home-review-single-photo.png"
 import ReviewsBg from "@/pages/home/sections/reviews/assets/backgrounds/ReviewsBg"
 import { ReviewCard } from "@/shared/components/ui/cards/ReviewCard"
 import { mockReviewsData } from "@/entities/review/model/mock"
@@ -16,7 +15,7 @@ import { ReviewAnimationWrapper } from "@/pages/home/sections/reviews/ui/ReviewA
 
 const HomeReviews = (props: React.HTMLAttributes<HTMLElement>) => {
     return (
-        <section className={`${props.className} px-2.5 desktop:px-10 mt-20 w-full flex flex-col gap-10 items-center relative desktop:mt-50`}>
+        <section id={props.id} className={`${props.className} px-2.5 desktop:px-10 mt-20 w-full flex flex-col gap-10 items-center relative desktop:mt-50`}>
             <div className="relative flex flex-col w-full z-20">
                 <div className="w-full desktop:max-w-max flex flex-col relative gap-2.5 pr-24 desktop:pr-0">
                     <HomeH2 className="w-full max-w-max text-secondary">
@@ -60,7 +59,7 @@ const HomeReviews = (props: React.HTMLAttributes<HTMLElement>) => {
                     />
                 </ReviewAnimationWrapper>
 
-                <ReviewAnimationWrapper index={1} className="col-span-5 row-span-4 col-start-7">
+                <ReviewAnimationWrapper index={1} className="col-span-5 row-span-4 row-start-2 col-start-7">
                     <ReviewCard
                         key={mockReviewsData[1].nickName}
                         {...mockReviewsData[1]}
@@ -71,14 +70,14 @@ const HomeReviews = (props: React.HTMLAttributes<HTMLElement>) => {
 
                 <ReviewAnimationWrapper index={2} className="col-span-5 row-span-5 col-start-14">
                     <ReviewCard
-                        key={mockReviewsData[3].nickName}
-                        {...mockReviewsData[3]}
+                        key={mockReviewsData[2].nickName}
+                        {...mockReviewsData[2]}
                         variant="notepad"
                         className="max-h-max max-w-none"
                     />
                 </ReviewAnimationWrapper>
 
-                <ReviewAnimationWrapper index={4} className="col-span-5 row-span-4 col-start-4 row-start-7">
+                <ReviewAnimationWrapper index={3} className="col-span-5 row-span-4 col-start-4 row-start-7">
                     <ReviewCard
                         key={mockReviewsData[3].nickName}
                         {...mockReviewsData[3]}
@@ -87,7 +86,7 @@ const HomeReviews = (props: React.HTMLAttributes<HTMLElement>) => {
                     />
                 </ReviewAnimationWrapper>
 
-                <ReviewAnimationWrapper index={5} className="col-span-5 row-span-5 col-start-11 row-start-6">
+                <ReviewAnimationWrapper index={4} className="col-span-5 row-span-5 col-start-11 row-start-6">
                     <ReviewCard
                         key={mockReviewsData[4].nickName}
                         {...mockReviewsData[4]}

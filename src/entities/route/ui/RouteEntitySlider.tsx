@@ -11,9 +11,14 @@ interface RouteEntitySliderProps {
     maxItems?: number;
     ref?: React.Ref<EntitySliderRef>;
     customBreakpoints?: SwiperProps['breakpoints']
+    loading?: boolean
+
+    hasMore?: boolean;
+    onLoadMore?: () => void;
+    loadMoreLoading?: boolean;
 }
 
-export const RouteEntitySlider = ({ routes, ref, ...props }: RouteEntitySliderProps) => {
+export const RouteEntitySlider = ({ routes, ref, hasMore, onLoadMore, loadMoreLoading, ...props }: RouteEntitySliderProps) => {
     const items = routes.map(route => ({
         ...mapRouteToEntityCard(route),
         button: {
@@ -22,5 +27,13 @@ export const RouteEntitySlider = ({ routes, ref, ...props }: RouteEntitySliderPr
             to: `/route/${route.route_id}`,
         },
     }));
-    return <EntitySlider ref={ref} items={items} {...props} />;
+    return <EntitySlider
+        ref={ref}
+        items={items}
+        hasMore={hasMore}
+        onLoadMore={onLoadMore}
+        loadMoreLoading={loadMoreLoading}
+        loadMoreButtonText="Больше маршрутов"
+        {...props}
+    />;
 };

@@ -35,7 +35,7 @@ export const RegisterForm = () => {
         >
             <FormError message={errorMessage} />
 
-            <div className="grid w-full grid-cols-1 desktop:grid-cols-2 desktop:gap-2 items-center gap-1 sm:max-w-1/2">
+            <div className="grid w-full grid-cols-1 desktop:grid-cols-2 desktop:gap-2 items-start gap-1 sm:max-w-1/2">
                 <BaseInput
                     {...formRegister("username")}
                     placeholder="Никнейм"

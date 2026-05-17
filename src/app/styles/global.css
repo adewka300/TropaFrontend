@@ -449,3 +449,26 @@ h4 {
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+
+/* для отключения зума при активном инпуте в safari */
+@supports (-webkit-touch-callout: none) {
+  @media screen and (max-width: 768px) {
+
+    input,
+    textarea {
+      font-size: 16px !important;
+
+      transform: scale(0.875) !important;
+      transform-origin: left center !important;
+    }
+  }
+}
+
+
+/* равен leading-14 в обычном браузере */
+@supports (-webkit-touch-callout: none) {
+  .safari-leading-12 {
+    line-height: 3.5rem;
+  }
+}

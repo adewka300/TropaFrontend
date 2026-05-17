@@ -10,7 +10,7 @@ import ProfileSuggestedRoutesSlider from "@/pages/user/profile/ui/ProfileSuggest
 import { ProfileStatsCardDetailed } from "@/pages/user/profile/ui/ProfileStatsCardDetailed";
 import VerifiedDateBadge from "@/shared/components/ui/badges/VerifiedDateBadge";
 import { FormError } from "@/shared/lib/feedback/FormError";
-import { useUserProfile, useUserAllRoutes, useUserStatistics, useRecommendedRoutes } from "@/entities/user/hooks/useUserQueries";
+import { useUserProfile, useUserStatistics, useRecommendedRoutes, useUserPublicRoutes } from "@/entities/user/hooks/useUserQueries";
 import { Loader } from "@/shared/lib/feedback/Loader";
 import { mockPlacesData } from "@/entities/place/model/mock";
 
@@ -19,13 +19,13 @@ const UserProfilePage = () => {
 
     const { data: user, isLoading: userLoading, isError: userError } = useUserProfile();
     const { data: stats, isLoading: statsLoading } = useUserStatistics();
-    const { data: routesData, isLoading: routesLoading } = useUserAllRoutes();
-    const { data: recommendedRoutes, isLoading: recommendedLoading, error: recommendedError } = useRecommendedRoutes(6, user?.id ? undefined : "all");
+    const { data: userPublicRoutesData, isLoading: userPublicRoutesLoading } = useUserPublicRoutes(6);
+    const { data: recommendedRoutes, isLoading: recommendedLoading } = useRecommendedRoutes(6);
 
-    const routes = routesData?.routes ?? [];
+    const userPublicRoutes = userPublicRoutesData?.routes ?? [];
     const recommended = recommendedRoutes ?? [];
 
-    if (userLoading || statsLoading || routesLoading) return <Loader />;
+    if (userLoading || statsLoading || userPublicRoutesLoading) return <Loader />;
 
     if (userError || !user) {
         return <FormError message="Не удалось загрузить профиль" />;
@@ -74,7 +74,7 @@ const UserProfilePage = () => {
                     </div>
                 </div>
 
-                <ProfileRoutesSlider routes={routes} loading={routesLoading} />
+                <ProfileRoutesSlider routes={userPublicRoutes} loading={userPublicRoutesLoading} />
             </div>
 
             <ProfileSuggestedPlacesSlider places={mockPlacesData} />

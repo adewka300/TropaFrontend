@@ -29,14 +29,14 @@ export type RouteStatus = "going" | "done" | "cancelled";
 
 export interface RouteListItem {
     route_id: string;
-    title?: string | null;                   // ← новое
+    title?: string | null;
     description: string | null;
     total_duration: number;
     total_cost: number | null;
     status: RouteStatus;
-    is_public?: boolean;                     // ← новое
-    public_uses_count?: number;              // ← новое
-    original_route_id?: string | null;       // ← новое
+    is_public?: boolean;
+    public_uses_count?: number;
+    original_route_id?: string | null;
     created_at: string;
     updated_at: string | null;
     city?: string | null;

@@ -13,6 +13,8 @@ import clsx from "clsx";
 import { Link } from "react-router-dom";
 import type { RouteListItem } from "@/shared/api/user/types";
 import { EmptyState } from "@/shared/lib/feedback/EmptyState";
+import { FilterManager } from "@/widgets/FilterManager";
+import { useState } from "react";
 
 const PAGE_SIZE = 6;
 
@@ -27,7 +29,8 @@ const RoutesGrid = ({ className, routes }: { className?: string; routes: RouteLi
 );
 
 const UserRoutesPage = () => {
-    const { isDesktop } = useScreenSize();
+    const { isAboveTablet } = useScreenSize();
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
 
     const {
         data: activeData,
@@ -60,7 +63,7 @@ const UserRoutesPage = () => {
                 <h1 className="text-heading-2xl! text-secondary">Активные маршруты</h1>
 
                 <div className="grid grid-cols-3 desktop:flex gap-2.5">
-                    <span className="text-5xl font-heading text-primary leading-none col-span-1 h-full px-5 relative desktop:hidden">
+                    <span className="text-5xl font-heading safari-leading-12 text-primary col-span-1 h-full px-5 relative desktop:hidden">
                         {activeData?.totalCount ?? 0}
                         <span className="text-body-sm font-decoration ml-1">маршрутов</span>
                         <BorderWrapper borderComponent={BaseButtonBorder} />
@@ -79,42 +82,64 @@ const UserRoutesPage = () => {
 
             {activeRoutes.length > 0 ? (
                 <>
-                    {isDesktop ? (
-                        <RoutesGrid routes={activeRoutes} />
+                    {isAboveTablet ? (
+                        <>
+                            <RoutesGrid routes={activeRoutes} />
+                            {activeHasMore && (
+                                <BaseButton
+                                    onClick={() => activeFetchNext()}
+                                    loading={activeFetching}
+                                    title="Больше маршрутов"
+                                    size="md"
+                                    className="w-full max-w-none desktop:max-w-1/3 desktop:mx-auto"
+                                />
+                            )}
+                        </>
                     ) : (
-                        <RouteEntitySlider
-                            routes={activeRoutes.slice(0, PAGE_SIZE)}
-                            className="flex px-0!"
-                            customBreakpoints={{
-                                360: { slidesPerView: 2 },
-                                600: { slidesPerView: 3 },
-                                640: { slidesPerView: 2 },
-                                768: { spaceBetween: 10 },
-                                1280: { slidesPerView: 4, spaceBetween: 20 },
-                            }}
-                        />
-                    )}
-                    {activeHasMore && (
-                        <BaseButton
-                            onClick={() => activeFetchNext()}
-                            loading={activeFetching}
-                            title="Больше маршрутов"
-                            size="md"
-                            className="w-full max-w-none desktop:max-w-1/3 desktop:mx-auto"
-                        />
+                        <>
+                            <RouteEntitySlider
+                                routes={activeRoutes}
+                                className="flex px-0! h-full"
+                                hasMore={activeHasMore}
+                                onLoadMore={() => activeFetchNext()}
+                                loadMoreLoading={activeFetching}
+                                customBreakpoints={{
+                                    360: { slidesPerView: 1.8 },
+                                    600: { slidesPerView: 3.2 },
+                                    640: { slidesPerView: 2.4 },
+                                    768: { spaceBetween: 10 },
+                                    1280: { slidesPerView: 4, spaceBetween: 20 },
+                                }}
+                            />
+                        </>
                     )}
                 </>
             ) : (
-                <EmptyState
-                    message="У тебя пока нет активных маршрутов :("
-                />
+                <EmptyState message="У тебя пока нет активных маршрутов :(" />
             )}
 
             {/* Все маршруты */}
             <div className="w-full flex items-start justify-between relative">
                 <h2 className="text-heading-2xl! text-secondary">Все маршруты</h2>
                 <AllRoutesHeading pointerEvents="none" />
+
+                <FilterManager type="tablet" isOpen={true} className="hidden! tablet:flex! w-45 shrink-0 absolute -left-6.75 top-0 h-full -translate-x-1/1" />
             </div>
+
+            <BaseButton
+                onClick={() => setIsFilterOpen(true)}
+                variant="tertiary"
+                borderColor="border-secondary"
+                title="Фильтры"
+                size="xl"
+                className="w-full max-w-none flex tablet:hidden!"
+            />
+
+            <FilterManager
+                type="mobile"
+                isOpen={isFilterOpen}
+                onClose={() => setIsFilterOpen(false)}
+            />
 
             {allRoutes.length > 0 ? (
                 <>
@@ -130,9 +155,7 @@ const UserRoutesPage = () => {
                     )}
                 </>
             ) : (
-                <EmptyState
-                    message="Здесь пока ничего нет :("
-                />
+                <EmptyState message="Здесь пока ничего нет :(" />
             )}
         </div>
     );

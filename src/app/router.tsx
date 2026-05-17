@@ -5,6 +5,8 @@ import { PageLoader } from '@/shared/components/ui/loaders/PageLoader'
 import { AppLayout } from '@/app/AppLayout'
 import HomePage from '@/pages/home'
 import { ProtectedRoute } from '@/widgets/ProtectedRoute'
+import PublicProfilePage from '@/pages/user/public-profile'
+import UserProfilePage from '@/pages/user/profile'
 
 const RouteDetailsPage = lazy(() => import('@/pages/route'))
 const CreateRoutePage = lazy(() => import('@/pages/create-route'))
@@ -16,13 +18,10 @@ const LoginPage = lazy(() => import('@/pages/auth/login'))
 const RegisterPage = lazy(() => import('@/pages/auth/register'))
 
 const UserLayout = lazy(() => import('@/pages/user/ui/UserLayout').then(m => ({ default: m.UserLayout })))
-const UserProfilePage = lazy(() => import('@/pages/user/profile'))
 const UserRoutesPage = lazy(() => import('@/pages/user/routes'))
 const UserFavouritePlacesPage = lazy(() => import('@/pages/user/favourite-places'))
 const UserStatsPage = lazy(() => import('@/pages/user/stats'))
 const UserSettingsPage = lazy(() => import('@/pages/user/settings'))
-
-const PublicProfilePage = lazy(() => import('@/pages/user/public-profile'))
 
 
 export const router = createBrowserRouter([
@@ -73,10 +72,11 @@ export const router = createBrowserRouter([
                                     { path: 'favourite-places', element: <UserFavouritePlacesPage /> },
                                     { path: 'stats', element: <UserStatsPage /> },
                                     { path: 'settings', element: <UserSettingsPage /> },
+                                    { path: ':id', element: <PublicProfilePage /> },
+
                                 ]
                             },
 
-                            { path: ':id', element: <PublicProfilePage /> },
                         ]
                     },
                 ]

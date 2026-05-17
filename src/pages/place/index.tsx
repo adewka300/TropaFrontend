@@ -6,7 +6,6 @@ import { PlaceTargetAudience } from "@/pages/place/ui/PlaceTargetAudience";
 import { ReviewCard } from "@/shared/components/ui/cards/ReviewCard";
 import { ReviewForm } from "@/features/point-review";
 import PageWrapper from "@/shared/components/wrappers/PageWrapper";
-import PlaceImage from "@/pages/route/assets/images/place-img.jpg";
 import { mapPointToAudience, mapPointToFullPlaceDetails } from "@/entities/place/lib/mapPointToFullPlaceDetails";
 import { usePointDetail, usePointReviews } from "@/entities/place/hooks/usePointQueries";
 import BaseButton from "@/shared/components/ui/buttons/BaseButton";
@@ -114,12 +113,12 @@ const PlacePage = () => {
                                 <ul className="grid grid-cols-1 xs:grid-cols-2 tablet:grid-cols-1 gap-2.5">
                                     {(reviewsData?.reviews ?? point.last_reviews).map((review) => (
                                         <ReviewCard
+                                            userId={review.user_id}
                                             className="min-w-full max-w-none xs:min-w-0 xs:pl-4 xs:pr-3 sm:pl-6 sm:pr-5"
                                             key={`${review.user_id}-${review.created_at}`}
                                             nickName={review.username}
                                             description={review.comment}
                                             rating={review.rating}
-                                            userImage={PlaceImage}
                                             date={new Date(review.created_at).toLocaleDateString("ru-RU")}
                                         />
                                     ))}

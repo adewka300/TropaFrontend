@@ -41,7 +41,7 @@ const BaseInput = ({
                         type={type}
                         className={clsx(
                             "absolute inset-0 z-10 w-full h-full bg-transparent outline-none border-none px-4",
-                            "text-body-sm! text-text placeholder:text-text/60",
+                            "tablet:text-body-sm! text-text placeholder:text-text/60",
                             "disabled:opacity-50",
                             className
                         )}

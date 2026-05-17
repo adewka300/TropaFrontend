@@ -33,7 +33,7 @@ export const FilterManager = ({ isOpen, onClose, type, className }: Props) => {
 
     if (type === 'tablet') {
         return (
-            <aside className={clsx("flex flex-col gap-7.5 py-4", className)}>
+            <div className={clsx("flex flex-col gap-7.5 py-4", className)}>
                 <h2 className="text-heading-md! text-primary px-5 font-bold">
                     Фильтры
                 </h2>
@@ -52,7 +52,7 @@ export const FilterManager = ({ isOpen, onClose, type, className }: Props) => {
                         onClick={onClose}
                     />
                 </div>
-            </aside>
+            </div>
         );
     }
 

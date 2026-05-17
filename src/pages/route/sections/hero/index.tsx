@@ -15,10 +15,12 @@ import clsx from 'clsx';
 import type { RouteHeroData } from '@/entities/route/lib/mapRouteDetailToUI';
 import { Link } from 'react-router-dom';
 import { buildYandexRouteUrl } from '@/shared/lib/formatYandexMapsLinks';
+import { useCopyPublicRoute } from '@/entities/route/hooks/useRouteQueries';
 
 interface RouteHeroSectionProps extends HTMLAttributes<HTMLElement> {
     data: RouteHeroData;
     routeId: string;
+    originalRouteId?: string | null;
     isOwner?: boolean;
     isPublic?: boolean;
     onToggleVisibility?: () => void;
@@ -31,6 +33,7 @@ interface RouteHeroSectionProps extends HTMLAttributes<HTMLElement> {
 export const RouteHeroSection = ({
     data,
     routeId,
+    originalRouteId,
     isOwner = true,
     isPublic = false,
     onToggleVisibility,
@@ -41,6 +44,13 @@ export const RouteHeroSection = ({
     onStart,
     ...props
 }: RouteHeroSectionProps) => {
+    const { mutate: copyPublicRoute, isPending: isCopying } = useCopyPublicRoute();
+
+    const handleCopyRoute = () => {
+        if (!routeId) return;
+        copyPublicRoute({ route_id: routeId });
+    };
+
     const metrics = [
         { value: data.totalMeters, label: 'Дистанция' },
         { value: data.totalCost, label: 'Бюджет' },
@@ -50,6 +60,7 @@ export const RouteHeroSection = ({
     const yandexUrl = buildYandexRouteUrl(data.coordinates);
 
     const statusLabel = data.status === 'going' ? 'Активен' : data.status === 'done' ? 'Пройден' : 'Отменён';
+
 
     return (
         <section className={clsx(className)} {...props}>
@@ -123,16 +134,40 @@ export const RouteHeroSection = ({
                         <line className="z-20 border-r border-secondary desktop:block hidden" />
 
                         <div className="flex flex-col tablet:flex-2/3 desktop:max-w-85 gap-4 tablet:gap-6 desktop:gap-4">
-                            <BaseButton
-                                variant="secondary"
-                                className="min-w-full! desktop:order-1 order-2"
-                                as={Link}
-                                to={yandexUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Открыть в Яндекс. Картах
-                            </BaseButton>
+                            <div className='flex flex-col gap-2 desktop:order-1 order-2'>
+                                <BaseButton
+                                    variant="secondary"
+                                    className="max-w-none"
+                                    as={Link}
+                                    to={yandexUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Открыть в Яндекс.Картах
+                                </BaseButton>
+                                {!isOwner && (
+                                    <BaseButton
+                                        variant="primary"
+                                        className="max-w-none"
+                                        onClick={handleCopyRoute}
+                                        loading={isCopying}
+                                    >
+                                        Скопировать маршрут к себе
+                                    </BaseButton>
+                                )
+                                }
+                                {isOwner && originalRouteId && (
+                                    <BaseButton
+                                        variant="secondary"
+                                        className="max-w-none"
+                                        as={Link}
+                                        to={`/route/${originalRouteId}`}
+                                    >
+                                        Посмотреть оригинальный маршрут
+                                    </BaseButton>
+                                )}
+
+                            </div>
 
                             <ul className="order-1 desktop:order-2 desktop:mt-auto *:bg-background *:rounded-xl *:flex *:flex-col *:p-4 *:relative *:w-full *:max-w-max *:sm:min-w-24 flex flex-row justify-between">
                                 {metrics.map((metric, i) => (

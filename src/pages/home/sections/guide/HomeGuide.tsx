@@ -41,6 +41,7 @@ const HomeGuide = (props: React.HTMLAttributes<HTMLElement>) => {
     return (
         <section
             ref={sectionRef}
+            id={props.id}
             className={`${props.className} flex flex-col relative desktop:pt-40 pt-28 sm:py-16 pb-24 desktop:pb-40 z-20`}
         >
             <div className="flex flex-col w-full z-20">

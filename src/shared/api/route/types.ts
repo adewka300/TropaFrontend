@@ -16,6 +16,8 @@ export interface RoutePointDTO {
     city: string | null;
     tags: string[];
     interests: string[];
+
+    is_partner: boolean //пока не возвращается с апи
 }
 
 export interface RouteDetailDTO {
@@ -47,16 +49,19 @@ export interface RouteDetailDTO {
 export type RouteDetailResponse = ApiResponse<RouteDetailDTO>;
 
 // POST /route/edit-status/
+
+type RouteStatus = "going" | "done" | "cancelled"
+
 export interface EditRouteStatusRequest {
     route_id: string;
-    status: "going" | "done" | "cancelled";
+    status: RouteStatus;
 }
 
 export interface EditRouteStatusResponse {
     status: "success";
     data: {
         route_id: string;
-        new_status: string;
+        new_status: RouteStatus;
         updated_at: string;
     };
 }
@@ -174,4 +179,20 @@ export interface RecommendedRoutesResponse {
     status: "success";
     total_count: number;
     data: RecommendedRouteDTO[];
+}
+
+
+//  POST /api/route/copy-public/
+
+export interface CopyPublicRouteRequest {
+    route_id: string;
+}
+
+export interface CopyPublicRouteResponse {
+    status: "success";
+    data: {
+        route: RouteDetailDTO;
+        source_route_id: string;
+        source_public_uses_count: number;
+    };
 }

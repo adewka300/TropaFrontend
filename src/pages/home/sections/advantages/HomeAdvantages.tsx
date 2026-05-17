@@ -9,7 +9,7 @@ import ComparisonCards from "@/pages/home/sections/advantages/components/Compari
 
 const HomeAdvantages = (props: React.HTMLAttributes<HTMLElement>) => {
     return (
-        <section className={`${props.className} flex flex-col w-full relative mb-24 desktop:mb-56`}>
+        <section id={props.id} className={`${props.className} flex flex-col w-full relative mb-24 desktop:mb-56`}>
             <div className="flex flex-col w-full z-10 desktop:px-10">
                 <div className="relative flex flex-col w-full gap-5 z-10">
                     <HomeH2 className="z-10 items-center text-center">

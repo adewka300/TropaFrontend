@@ -1,7 +1,8 @@
 // entities/route/hooks/useRouteQueries.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { routeApi } from "@/shared/api/route";
-import type { EditRouteStatusRequest, CancelRouteRequest, RouteFeedbackRequest, AddFoodPointRequest } from "@/shared/api/route/types";
+import type { EditRouteStatusRequest, RouteFeedbackRequest, AddFoodPointRequest, CopyPublicRouteRequest } from "@/shared/api/route/types";
+import { useNavigate } from "react-router-dom";
 
 export const useRouteDetail = (routeId: string) => {
     return useQuery({
@@ -17,18 +18,6 @@ export const useEditRouteStatus = () => {
 
     return useMutation({
         mutationFn: (data: EditRouteStatusRequest) => routeApi.editStatus(data),
-        onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({ queryKey: ["route", variables.route_id] });
-            queryClient.invalidateQueries({ queryKey: ["user", "routes"] });
-        },
-    });
-};
-
-export const useCancelRoute = () => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-        mutationFn: (data: CancelRouteRequest) => routeApi.cancel(data),
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({ queryKey: ["route", variables.route_id] });
             queryClient.invalidateQueries({ queryKey: ["user", "routes"] });
@@ -52,8 +41,13 @@ export const useAddFoodPoint = () => {
 
     return useMutation({
         mutationFn: (data: AddFoodPointRequest) => routeApi.addFoodPoint(data),
-        onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({ queryKey: ["route", variables.route_id] });
+        onSuccess: (response, variables) => {
+            queryClient.setQueryData(
+                ["route", variables.route_id],
+                response
+            );
+
+            queryClient.invalidateQueries({ queryKey: ["user", "routes"] });
         },
     });
 };
@@ -76,6 +70,24 @@ export const useRouteVisibility = () => {
             routeApi.setVisibility(data),
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({ queryKey: ["route", variables.route_id] });
+        },
+    });
+};
+
+export const useCopyPublicRoute = () => {
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+
+    return useMutation({
+        mutationFn: (data: CopyPublicRouteRequest) => routeApi.copyPublic(data),
+        onSuccess: (response) => {
+            const newRouteId = response.data.route.route_id;
+
+            queryClient.invalidateQueries({ queryKey: ["routes", "public"] });
+            queryClient.invalidateQueries({ queryKey: ["user", "routes"] });
+            queryClient.invalidateQueries({ queryKey: ["routes", "recommended"] });
+
+            navigate(`/route/${newRouteId}`);
         },
     });
 };

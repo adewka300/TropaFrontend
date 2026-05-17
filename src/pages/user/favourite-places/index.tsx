@@ -5,6 +5,8 @@ import { FormError } from "@/shared/lib/feedback/FormError";
 import { PlaceEntityCardContainer } from "@/entities/place/ui/PlaceEntityCardContainer";
 import BaseButton from "@/shared/components/ui/buttons/BaseButton";
 import { EmptyState } from "@/shared/lib/feedback/EmptyState";
+import { useState } from "react";
+import { FilterManager } from "@/widgets/FilterManager";
 
 const PAGE_SIZE = 6;
 
@@ -22,6 +24,8 @@ const UserFavouritePlacesPage = () => {
     const { data, isLoading, isError, isFetchingNextPage, hasNextPage, fetchNextPage } =
         useUserFavouritePlaces(PAGE_SIZE);
 
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+
     const places = data?.places ?? [];
 
     if (isLoading) {
@@ -35,6 +39,21 @@ const UserFavouritePlacesPage = () => {
             <h1 className="text-heading-2xl! text-secondary">
                 Тут собраны все твои любимые локации
             </h1>
+
+            <BaseButton
+                onClick={() => setIsFilterOpen(true)}
+                variant="tertiary"
+                borderColor="border-secondary"
+                title="Фильтры"
+                size="xl"
+                className="w-full max-w-none tablet:hidden"
+            />
+
+            <FilterManager
+                type="mobile"
+                isOpen={isFilterOpen}
+                onClose={() => setIsFilterOpen(false)}
+            />
 
 
             {places.length > 0 ? (

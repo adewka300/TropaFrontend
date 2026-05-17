@@ -58,11 +58,11 @@ const HomePopularPlaces = (props: React.HTMLAttributes<HTMLElement>) => {
                 />
             </div>
 
-            <div className="w-full mt-6 overflow-hidden desktop:overflow-visible z-20">
+            <div className="w-full mt-6 overflow-hidden z-20">
                 <PlaceEntitySlider
                     className="desktop:max-w-none desktop:w-full pt-4 desktop:pr-12.5 desktop:pl-12.5"
                     rotateSlides
-                    places={mockPlacesData.slice(0, 4)}
+                    places={mockPlacesData}
                     slideClassName="tablet:pt-1 desktop:pt-0 tablet:*:last:rounded-b-2xl desktop:rounded-auto"
                 />
             </div>

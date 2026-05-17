@@ -32,7 +32,6 @@ export const UserLayout = () => {
 
     const shouldShowDove = isMyRoutes || isPublicProfile || isPrivateProfile || isStats;
 
-
     const renderBackground = () => {
         switch (pathname) {
             case '/user/stats':
@@ -51,11 +50,11 @@ export const UserLayout = () => {
         }
     };
 
-    const isFilterablePage = pathname === '/user/routes' || pathname === '/user/favourite-places';
-
+    const isFilterablePage = pathname === '/user/favourite-places';
+    const isUserRoutesPage = pathname === '/user/routes'
     return (
         <PageWrapper className="flex-row items-start px-2.5 tablet:px-10 pb-40 tablet:pt-20 relative overflow-hidden!">
-            <aside className="hidden tablet:flex flex-col -mt-0.5 gap-2 w-45 shrink-0 rounded-2xl z-20 relative">
+            <aside className={clsx(isUserRoutesPage && 'mb-420 lg:mb-300', "hidden tablet:flex flex-col -mt-0.5 gap-2 w-45 shrink-0 rounded-2xl z-20 relative")}>
                 <nav className="flex flex-col -space-y-4">
                     {USER_CABINET_LINKS.map((item, index) => {
                         const Icon = item.icon;
@@ -104,11 +103,14 @@ export const UserLayout = () => {
                 )}
 
                 {isFilterablePage && (
-                    <FilterManager type="tablet" isOpen={true} className={pathname === '/user/routes' ? 'tablet:mt-4 desktop:mt-147' : undefined} />
+                    <FilterManager type="tablet" isOpen={true} />
                 )}
             </aside>
 
-            <section className={clsx(pathname === USER_CABINET_LINKS[0].path && 'tablet:rounded-tl-none', "z-10 flex flex-1 tablet:-ml-[0.525rem] desktop:-ml-[0.45rem] tablet:p-6 tablet:pb-8 lg:p-8 lg:pb-10 overflow-hidden max-w-screen-lg w-full min-h-96 relative tablet:bg-background tablet:border-2 tablet:border-primary tablet:rounded-3xl")}>
+            <section className={clsx(pathname === USER_CABINET_LINKS[0].path && 'tablet:rounded-tl-none',
+                !isUserRoutesPage && 'overflow-hidden',
+                "z-10 flex flex-1 tablet:-ml-[0.525rem] desktop:-ml-[0.45rem] tablet:p-6 tablet:pb-8 lg:p-8 lg:pb-10 max-w-screen-lg w-full min-h-96 relative tablet:bg-background tablet:border-2 tablet:border-primary tablet:rounded-3xl"
+            )}>
                 <div className='pt-30 tablet:pt-0 flex w-full z-10'>
                     <Outlet />
                 </div>
