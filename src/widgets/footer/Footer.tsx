@@ -14,8 +14,8 @@ export function Footer({ className }: { className?: string }) {
     ]
 
     const legalLinks = [
-        { label: 'Политика конфиденциальности', href: '#privacy' },
-        { label: 'Юридическая информация', href: '#legal' },
+        { label: 'Политика конфиденциальности', href: '/privacy' },
+        { label: 'Юридическая информация', href: '/legal' },
     ]
 
     return (
@@ -64,6 +64,7 @@ export function Footer({ className }: { className?: string }) {
                     </motion.div>
 
                     <div className="order-3 col-span-1 text-secondary desktop:text-background flex flex-col justify-end desktop:justify-start gap-3 text-body-sm-medium w-max desktop:order-4 desktop:col-span-3 desktop:row-start-2">
+                        <a href='https://julys-design.ru/'>Дизайн сайта</a>
                         <p>© Все права защищены, 2026</p>
                     </div>
 
