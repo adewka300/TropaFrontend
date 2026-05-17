@@ -43,7 +43,7 @@ export interface PointReviewDTO {
     username: string;
     rating: number;
     comment: string;
-    updated_at: string;
+    created_at: string;
 }
 
 export interface PointReviewsResponseData {
