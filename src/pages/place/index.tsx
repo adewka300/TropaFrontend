@@ -115,11 +115,11 @@ const PlacePage = () => {
                                         <ReviewCard
                                             userId={review.user_id}
                                             className="min-w-full max-w-none xs:min-w-0 xs:pl-4 xs:pr-3 sm:pl-6 sm:pr-5"
-                                            key={`${review.user_id}-${review.updated_at}`}
+                                            key={`${review.user_id}-${review.created_at}`}
                                             nickName={review.username}
                                             description={review.comment}
                                             rating={review.rating}
-                                            date={new Date(review.updated_at).toLocaleDateString("ru-RU")}
+                                            date={new Date(review.created_at).toLocaleDateString("ru-RU")}
                                         />
                                     ))}
                                 </ul>
